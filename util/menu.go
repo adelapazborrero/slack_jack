@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"strings"
 
 	"github.com/adelapazborrero/slack_jack/service"
@@ -96,9 +97,19 @@ func BuildMenu(slackService *service.SlackService) *Menu {
 func (m *Menu) Show() {
 	for {
 		fmt.Println("\nMenu:")
-		for index, item := range m.Items {
-			fmt.Printf("%s: %s\n", index, item.Description)
+
+		var keys []string
+		for key := range m.Items {
+			keys = append(keys, key)
 		}
+
+		sort.Strings(keys)
+
+		for _, key := range keys {
+			item := m.Items[key]
+			fmt.Printf("%s: %s\n", key, item.Description)
+		}
+
 		fmt.Println("q: Quit")
 
 		reader := bufio.NewReader(os.Stdin)
