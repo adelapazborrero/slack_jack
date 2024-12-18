@@ -12,10 +12,17 @@ type SlackMessageMap struct {
 	Messages map[string][]SlackSentMessage `json:"messages"`
 }
 
+type SlackPermalinkResponse struct {
+	Ok        bool   `json:"ok"`
+	Permalink string `json:"permalink"`
+	Channel   string `json:"channel"`
+}
+
 type SlackSentMessage struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Ts   string `json:"ts"`
+	ID        string `json:"id"`
+	Text      string `json:"text"`
+	Ts        string `json:"ts"`
+	Permalink string `json:"permalink"`
 }
 
 type SlackMessage struct {

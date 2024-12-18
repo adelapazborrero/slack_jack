@@ -6,6 +6,8 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
+	"strings"
 
 	"github.com/adelapazborrero/slack_jack/model"
 )
@@ -46,7 +48,10 @@ func (serv *SlackService) PrintSentMessages() {
 	for channelID, messages := range serv.Messages.Messages {
 		fmt.Printf("Channel: %s\n", channelID)
 		for i, msg := range messages {
-			fmt.Printf("  Message #%d: %s (ID: %s)\n", i+1, msg.Text, msg.ID)
+			fmt.Printf("  Message #%d:\n", i+1)
+			fmt.Printf("    Text: %s\n", msg.Text)
+			fmt.Printf("    Timestamp: %s\n", msg.Ts)
+			fmt.Printf("    Permalink: %s\n", msg.Permalink)
 		}
 	}
 }
@@ -118,6 +123,7 @@ func (serv *SlackService) SendMessage(channelID, message string) error {
 		"channel": channelID,
 		"text":    message,
 	}
+
 	jsonPayload, err := json.Marshal(payload)
 	if err != nil {
 		return errors.New("could not marshal message payload to JSON")
@@ -148,12 +154,52 @@ func (serv *SlackService) SendMessage(channelID, message string) error {
 		return errors.New("failed to send message: " + slackResponse.Message.Text)
 	}
 
+	messageTs := slackResponse.Message.Ts
+
+	permalinkResponse, err := serv.getPermalink(channelID, messageTs)
+	if err != nil {
+		return err
+	}
+
 	sentMessage := model.SlackSentMessage{
-		ID:   slackResponse.Message.Ts,
-		Text: slackResponse.Message.Text,
-		Ts:   slackResponse.Message.Ts,
+		ID:        slackResponse.Message.Ts,
+		Text:      slackResponse.Message.Text,
+		Ts:        slackResponse.Message.Ts,
+		Permalink: permalinkResponse.Permalink,
 	}
 
 	serv.Messages.Messages[channelID] = append(serv.Messages.Messages[channelID], sentMessage)
 	return nil
+}
+
+func (s *SlackService) getPermalink(channelID, messageTs string) (*model.SlackPermalinkResponse, error) {
+	formData := url.Values{}
+	formData.Set("channel", channelID)
+	formData.Set("message_ts", messageTs)
+
+	req, err := http.NewRequest("POST", slackApi+permalinkEndpoint, strings.NewReader(formData.Encode()))
+	if err != nil {
+		return nil, fmt.Errorf("failed to create permalink request: %v", err)
+	}
+
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Authorization", "Bearer "+s.SlackBot.Token)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get permalink: %v", err)
+	}
+	defer resp.Body.Close()
+
+	var permalinkResp model.SlackPermalinkResponse
+	if err := json.NewDecoder(resp.Body).Decode(&permalinkResp); err != nil {
+		return nil, fmt.Errorf("failed to decode permalink response: %v", err)
+	}
+
+	if !permalinkResp.Ok {
+		return nil, fmt.Errorf("failed to retrieve permalink: %v", permalinkResp)
+	}
+
+	return &permalinkResp, nil
 }
