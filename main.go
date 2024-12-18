@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/adelapazborrero/slack_jack/menu"
 	"github.com/adelapazborrero/slack_jack/model"
 	"github.com/adelapazborrero/slack_jack/service"
 	"github.com/adelapazborrero/slack_jack/util"
@@ -38,6 +39,6 @@ func main() {
 
 	util.PrintTokenInformation(slackService.SlackBot.Info)
 
-	menu := util.BuildMenu(slackService)
+	menu := menu.Build(slackService)
 	menu.Show()
 }
