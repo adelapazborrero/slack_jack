@@ -27,5 +27,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	err = slackService.GetConversationList()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	fmt.Println(slackService.SlackBot.Info)
+	fmt.Println(slackService.Channels)
 }
