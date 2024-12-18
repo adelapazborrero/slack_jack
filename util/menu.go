@@ -28,15 +28,66 @@ func BuildMenu(slackService *service.SlackService) *Menu {
 		"1": {
 			Description: "Get Channel List",
 			FunctionToCall: func() {
-				err := slackService.GetConversationList()
-				if err != nil {
-					log.Println(err)
-					return
+				if slackService.Channels == nil || len(slackService.Channels.Channels) == 0 {
+					fmt.Println("Channel list is empty. Fetching channels...")
+					err := slackService.GetConversationList()
+					if err != nil {
+						log.Println(err)
+						return
+					}
 				}
 				PrintChannelList(slackService.Channels)
 			},
 		},
-		// more options here
+		"2": {
+			Description: "Send Message to Channel",
+			FunctionToCall: func() {
+				channelID := ""
+				if slackService.Channels == nil || len(slackService.Channels.Channels) == 0 {
+					fmt.Println("No channels available. Fetching channel list first...")
+					err := slackService.GetConversationList()
+					if err != nil {
+						log.Println(err)
+						return
+					}
+				}
+
+				fmt.Println("Select a channel from the list:")
+				PrintChannelList(slackService.Channels)
+				fmt.Print("Enter Channel ID: ")
+				reader := bufio.NewReader(os.Stdin)
+				channelID, _ = reader.ReadString('\n')
+				channelID = strings.TrimSpace(channelID)
+
+				if channelID == "" {
+					fmt.Println("Channel ID cannot be empty.")
+					return
+				}
+
+				fmt.Print("Enter the message to send: ")
+				message, _ := reader.ReadString('\n')
+				message = strings.TrimSpace(message)
+
+				if message == "" {
+					fmt.Println("Message cannot be empty.")
+					return
+				}
+
+				err := slackService.SendMessage(channelID, message)
+				if err != nil {
+					log.Println("Failed to send message:", err)
+					return
+				}
+
+				fmt.Println("Message sent successfully!")
+			},
+		},
+		"3": {
+			Description: "Print Sent Messages",
+			FunctionToCall: func() {
+				slackService.PrintSentMessages()
+			},
+		},
 	}
 
 	return NewMenu(items)
