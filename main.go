@@ -1,7 +1,10 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/adelapazborrero/slack_jack/model"
 	"github.com/adelapazborrero/slack_jack/service"
@@ -9,9 +12,17 @@ import (
 )
 
 func main() {
-	slackToken := ""
+	slackToken := flag.String("t", "", "Slack Bot Token")
+	flag.StringVar(slackToken, "token", "", "Slack Bot Token")
+	flag.Parse()
 
-	slackBot := model.NewSlackBot(slackToken)
+	if *slackToken == "" {
+		fmt.Println("Slack Bot Token is required. Please use the -t or --token flag.")
+		os.Exit(1)
+	}
+
+	slackBot := model.NewSlackBot(*slackToken)
+
 	err := slackBot.Validate()
 	if err != nil {
 		log.Fatal(err)
@@ -19,6 +30,7 @@ func main() {
 	}
 
 	slackService := service.NewSlackService(slackBot)
+
 	err = slackService.ValidateBot()
 	if err != nil {
 		log.Fatal(err)
