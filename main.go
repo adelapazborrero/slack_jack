@@ -26,16 +26,6 @@ func main() {
 
 	util.PrintTokenInformation(slackService.SlackBot.Info)
 
-	prompt := util.NewPrompt()
-
-	enumerateChannels := prompt.EnumerateChannels()
-
-	if enumerateChannels {
-		err = slackService.GetConversationList()
-		if err != nil {
-			log.Fatal(err)
-		}
-		util.PrintChannelList(slackService.Channels)
-	}
-
+	menu := util.BuildMenu(slackService)
+	menu.Show()
 }
