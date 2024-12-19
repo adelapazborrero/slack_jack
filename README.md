@@ -10,6 +10,7 @@ This tool provides a command-line interface (CLI) where users can perform variou
 
 - **Get Channel List**: Fetch and display the list of available Slack channels.
 - **Send Message to Channel**: Send messages to selected channels using the Slack bot token.
+- **Send Predefined payloads to Channel**: Send built in payloads to selected channels using the Slack bot token.
 - **Print Sent Messages**: View the list of messages that have been sent by the bot.
 - **Save Sent Messages**: Save the sent messages to a JSON file, with the filename based on the bot user's name and the current date.
 
@@ -58,8 +59,9 @@ By using this tool, you acknowledge and agree to abide by all applicable laws an
 
 1. **Get Channel List**: Select option 1 to retrieve and display the list of Slack channels available to the bot.
 2. **Send Message to Channel**: Select option 2 to send a message to a chosen Slack channel. You'll be prompted to select a channel and input a message.
-3. **Print Sent Messages**: Select option 3 to print the list of messages that have been sent by the bot.
-4. **Save Sent Messages**: Select option 4 to save the sent messages as a JSON file. The filename will include the bot's username and the current date.
+3. **Send Payload to Channel**: Select option 2 to send a message to a chosen Slack channel. You'll be prompted to select a channel and input an option for predefined payloads, remember to upload the blocks as you will for links etc.
+4. **Print Sent Messages**: Select option 3 to print the list of messages that have been sent by the bot.
+5. **Save Sent Messages**: Select option 4 to save the sent messages as a JSON file. The filename will include the bot's username and the current date.
 
 # Setting up a test bot
 
@@ -68,6 +70,8 @@ By using this tool, you acknowledge and agree to abide by all applicable laws an
 - Create an app, check the manifest so you can do all the changes in json
 - Click on install app and Accept conditions
 - Receive and copy your token
+
+- For developing blocks you can use: https://api.slack.com/reference/block-kit/blocks
 
 ## Roadmap
 

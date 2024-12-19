@@ -1,12 +1,24 @@
-{
-  "blocks": [
-    {
-      "type": "button",
-      "text": {
-        "type": "plain_text",
-        "text": "Validate"
-      },
-      "url": "<link-to-pass>"
-    }
-  ]
-}
+[
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Your Slackbot token has expired, click Rotate to rotate the token"
+			}
+		},
+		{
+			"type": "actions",
+			"elements": [
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"emoji": true,
+						"text": "Rotate"
+					},
+					"style": "primary",
+					"url": "https://google.com"
+				}
+			]
+		}
+	]

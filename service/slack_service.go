@@ -172,6 +172,65 @@ func (serv *SlackService) SendMessage(channelID, message string) error {
 	return nil
 }
 
+func (serv *SlackService) SendMessageWithBlocks(channelID string, blocks json.RawMessage) error {
+	var parsedBlocks []map[string]interface{}
+	err := json.Unmarshal(blocks, &parsedBlocks)
+	if err != nil {
+		return fmt.Errorf("invalid blocks format: %v", err)
+	}
+
+	payload := map[string]interface{}{
+		"channel": channelID,
+		"blocks":  parsedBlocks,
+	}
+
+	jsonPayload, err := json.Marshal(payload)
+	if err != nil {
+		return errors.New("could not marshal message payload to JSON")
+	}
+
+	req, err := http.NewRequest(http.MethodPost, slackApi+sendMessageEndpoint, bytes.NewBuffer(jsonPayload))
+	if err != nil {
+		return errors.New("could not create HTTP request for sending message with blocks")
+	}
+
+	req.Header.Set("Authorization", "Bearer "+serv.SlackBot.Token)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	response, err := client.Do(req)
+	if err != nil {
+		return errors.New("could not call Slack API to send message with blocks")
+	}
+	defer response.Body.Close()
+
+	var slackResponse model.SlackMessageResponse
+	err = json.NewDecoder(response.Body).Decode(&slackResponse)
+	if err != nil {
+		return fmt.Errorf("could not decode JSON response for sendMessageWithBlocks: %s", err)
+	}
+
+	if !slackResponse.Ok {
+		return fmt.Errorf("failed to send message with blocks: %s", slackResponse.Message.Text)
+	}
+
+	messageTs := slackResponse.Message.Ts
+	permalinkResponse, err := serv.getPermalink(channelID, messageTs)
+	if err != nil {
+		return err
+	}
+
+	sentMessage := model.SlackSentMessage{
+		ID:        slackResponse.Message.Ts,
+		Text:      "Blocks Sent",
+		Ts:        slackResponse.Message.Ts,
+		Permalink: permalinkResponse.Permalink,
+	}
+
+	serv.Messages.Messages[channelID] = append(serv.Messages.Messages[channelID], sentMessage)
+	return nil
+}
+
 func (s *SlackService) getPermalink(channelID, messageTs string) (*model.SlackPermalinkResponse, error) {
 	formData := url.Values{}
 	formData.Set("channel", channelID)
