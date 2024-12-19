@@ -1,6 +1,7 @@
+<img src="assets/logo.png"/>
+
 # Slack Jack - Slack Bot Token Abuse Tool
 
-## Description
 
 Slack Jack is a tool designed for penetration testing purposes. It allows you to interact with Slack channels, send messages, retrieve channel lists, and save sent messages as JSON files. The tool is intended to help ethical hackers explore and test Slack bot token vulnerabilities during security assessments.
 
@@ -63,7 +64,7 @@ By using this tool, you acknowledge and agree to abide by all applicable laws an
 ## Roadmap
 
 - Add option to load payloads from local files (json)
-- Add default payloads ready to use
+- Add default payloads ready to use (https://api.slack.com/reference/block-kit/block-elements#interactive-components)
 - Add enumeration options such as List Users and Chat History
 
 ## License
