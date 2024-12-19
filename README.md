@@ -51,7 +51,7 @@ By using this tool, you acknowledge and agree to abide by all applicable laws an
 4. Run the tool:
 
     ```bash
-    ./slackjack
+    ./slackjack -t <xoxb-slack-bot-token>
     ```
 
 ## Usage
