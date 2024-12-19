@@ -2,12 +2,12 @@
 
 # Slack Jack - Slack Bot Token Abuse Tool
 
-
 Slack Jack is a tool designed for penetration testing purposes. It allows you to interact with Slack channels, send messages, retrieve channel lists, and save sent messages as JSON files. The tool is intended to help ethical hackers explore and test Slack bot token vulnerabilities during security assessments.
 
 This tool provides a command-line interface (CLI) where users can perform various actions related to Slack bot tokens, including interacting with Slack's API endpoints for sending and managing messages.
 
 ### Features:
+
 - **Get Channel List**: Fetch and display the list of available Slack channels.
 - **Send Message to Channel**: Send messages to selected channels using the Slack bot token.
 - **Print Sent Messages**: View the list of messages that have been sent by the bot.
@@ -31,28 +31,28 @@ By using this tool, you acknowledge and agree to abide by all applicable laws an
 
 1. Clone the repository:
 
-    ```bash
-    git clone https://github.com/adelapazborrero/slack_jack.git
-    cd slack_jack
-    ```
+   ```bash
+   git clone https://github.com/adelapazborrero/slack_jack.git
+   cd slack_jack
+   ```
 
 2. Install required Go dependencies:
 
-    ```bash
-    go mod tidy
-    ```
+   ```bash
+   go mod tidy
+   ```
 
 3. Build the tool:
 
-    ```bash
-    go build -o slackjack
-    ```
+   ```bash
+   go build -o slackjack
+   ```
 
 4. Run the tool:
 
-    ```bash
-    ./slackjack -t <xoxb-slack-bot-token>
-    ```
+   ```bash
+   ./slackjack -t <xoxb-slack-bot-token>
+   ```
 
 ## Usage
 
@@ -60,6 +60,14 @@ By using this tool, you acknowledge and agree to abide by all applicable laws an
 2. **Send Message to Channel**: Select option 2 to send a message to a chosen Slack channel. You'll be prompted to select a channel and input a message.
 3. **Print Sent Messages**: Select option 3 to print the list of messages that have been sent by the bot.
 4. **Save Sent Messages**: Select option 4 to save the sent messages as a JSON file. The filename will include the bot's username and the current date.
+
+# Setting up a test bot
+
+- Create a workspace in slack with any email you want to
+- Go to the docs of what Slack API bot tokens are https://api.slack.com/tutorials/tracks/getting-a-token
+- Create an app, check the manifest so you can do all the changes in json
+- Click on install app and Accept conditions
+- Receive and copy your token
 
 ## Roadmap
 
@@ -70,4 +78,3 @@ By using this tool, you acknowledge and agree to abide by all applicable laws an
 ## License
 
 This tool is licensed for educational use and legal penetration tests only. Unauthorized usage is prohibited.
-
