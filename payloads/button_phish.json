@@ -1,0 +1,12 @@
+{
+  "blocks": [
+    {
+      "type": "button",
+      "text": {
+        "type": "plain_text",
+        "text": "Validate"
+      },
+      "url": "<link-to-pass>"
+    }
+  ]
+}
