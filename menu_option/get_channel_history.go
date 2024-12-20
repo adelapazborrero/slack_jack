@@ -13,18 +13,23 @@ import (
 )
 
 func GetChannelHistory(slackService *service.SlackService) {
+	canReadChannels := true
+
 	if slackService.Channels == nil || len(slackService.Channels.Channels) == 0 {
 		fmt.Println("No channels available. Fetching channel list first...")
 		err := slackService.GetConversationList()
 		if err != nil {
-			log.Println(err)
-			return
+			fmt.Println(err)
+			fmt.Println("Select a channel ID manually")
+			canReadChannels = false
 		}
 	}
 
-	fmt.Println("Select a channel from the list:")
-	for _, channel := range slackService.Channels.Channels {
-		fmt.Printf("ID: %s, Name: %s\n", channel.ID, channel.Name)
+	if canReadChannels {
+		fmt.Println("Select a channel from the list:")
+		for _, channel := range slackService.Channels.Channels {
+			fmt.Printf("ID: %s, Name: %s\n", channel.ID, channel.Name)
+		}
 	}
 
 	fmt.Print("Enter Channel ID to fetch history: ")

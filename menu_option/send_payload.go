@@ -12,22 +12,29 @@ import (
 	"strings"
 
 	"github.com/adelapazborrero/slack_jack/service"
-	"github.com/adelapazborrero/slack_jack/util"
 )
 
 func SendPredefinedPayload(slackService *service.SlackService) {
+	canReadChannels := true
+
 	channelID := ""
 	if slackService.Channels == nil || len(slackService.Channels.Channels) == 0 {
 		fmt.Println("No channels available. Fetching channel list first...")
 		err := slackService.GetConversationList()
 		if err != nil {
-			log.Println(err)
-			return
+			fmt.Println(err)
+			fmt.Println("Select a channel ID manually")
+			canReadChannels = false
 		}
 	}
 
-	fmt.Println("Select a channel from the list:")
-	util.PrintChannelList(slackService.Channels)
+	if canReadChannels {
+		fmt.Println("Select a channel from the list:")
+		for _, channel := range slackService.Channels.Channels {
+			fmt.Printf("ID: %s, Name: %s\n", channel.ID, channel.Name)
+		}
+	}
+
 	fmt.Print("Enter Channel ID: ")
 	reader := bufio.NewReader(os.Stdin)
 	channelID, _ = reader.ReadString('\n')
