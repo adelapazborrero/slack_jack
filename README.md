@@ -16,6 +16,10 @@ This tool provides a command-line interface (CLI) where users can perform variou
 - **Join Channel**: Join a channel based on channelID if your bot has permissions to do so.
 - **Print Chat History**: Dump a selected amount of messages of specified channel if your bot has permissions to do so.
 
+
+### Demo against test target
+<img src="assets/demo.gif"/>
+
 ## Disclaimer
 
 This tool is a **Work In Progress (WIP)** and is intended **only for educational purposes** and **legal penetration tests**. It should not be used for any unauthorized or malicious activity. Always ensure that you have explicit permission from the target organization before performing any security testing.
@@ -62,6 +66,7 @@ By using this tool, you acknowledge and agree to abide by all applicable laws an
 Once the tool is initialized it will tell if the bot is valid or not. If the bot is valid, you will be presented with the menu.
 In the menu select your options and follow the Inputs. Depending on the permissions of the bot, you might or might not be able to pull some of the commands.
 
+
 # Setting up a test bot
 
 - Create a workspace in slack with any email you want to
@@ -76,7 +81,7 @@ In the menu select your options and follow the Inputs. Depending on the permissi
 
 - Add option to load payloads from local files (json)
 - Add default payloads ready to use (https://api.slack.com/reference/block-kit/block-elements#interactive-components)
-- Add enumeration options such as List Users and Chat History
+- Add enumeration options such as List Users 
 
 ## License
 
