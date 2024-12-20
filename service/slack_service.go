@@ -262,3 +262,86 @@ func (s *SlackService) getPermalink(channelID, messageTs string) (*model.SlackPe
 
 	return &permalinkResp, nil
 }
+
+func (serv *SlackService) JoinChannel(channelID string) error {
+	joinEndpoint := "/conversations.join"
+
+	payload := map[string]string{
+		"channel": channelID,
+	}
+
+	jsonPayload, err := json.Marshal(payload)
+	if err != nil {
+		return errors.New("could not marshal join channel payload to JSON")
+	}
+
+	req, err := http.NewRequest(http.MethodPost, slackApi+joinEndpoint, bytes.NewBuffer(jsonPayload))
+	if err != nil {
+		return errors.New("could not create HTTP request for joining channel")
+	}
+
+	req.Header.Set("Authorization", "Bearer "+serv.SlackBot.Token)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	response, err := client.Do(req)
+	if err != nil {
+		return errors.New("could not call Slack API to join channel")
+	}
+	defer response.Body.Close()
+
+	var joinResponse struct {
+		Ok    bool   `json:"ok"`
+		Error string `json:"error,omitempty"`
+	}
+
+	err = json.NewDecoder(response.Body).Decode(&joinResponse)
+	if err != nil {
+		return errors.New("could not decode JSON response for joinChannel")
+	}
+
+	if !joinResponse.Ok {
+		return fmt.Errorf("failed to join channel: %s", joinResponse.Error)
+	}
+
+	return nil
+}
+
+func (serv *SlackService) GetChannelHistory(channelID string, limit int) ([]model.SlackMessage, error) {
+	historyEndpoint := "/conversations.history"
+
+	params := url.Values{}
+	params.Set("channel", channelID)
+	params.Set("limit", fmt.Sprintf("%d", limit))
+
+	req, err := http.NewRequest(http.MethodGet, slackApi+historyEndpoint+"?"+params.Encode(), nil)
+	if err != nil {
+		return nil, errors.New("could not create HTTP request for fetching channel history")
+	}
+
+	req.Header.Set("Authorization", "Bearer "+serv.SlackBot.Token)
+
+	client := &http.Client{}
+	response, err := client.Do(req)
+	if err != nil {
+		return nil, errors.New("could not call Slack API to get channel history")
+	}
+	defer response.Body.Close()
+
+	var historyResponse struct {
+		Ok       bool                 `json:"ok"`
+		Messages []model.SlackMessage `json:"messages"`
+		Error    string               `json:"error,omitempty"`
+	}
+
+	err = json.NewDecoder(response.Body).Decode(&historyResponse)
+	if err != nil {
+		return nil, errors.New("could not decode JSON response for getChannelHistory")
+	}
+
+	if !historyResponse.Ok {
+		return nil, fmt.Errorf("failed to fetch channel history: %s", historyResponse.Error)
+	}
+
+	return historyResponse.Messages, nil
+}

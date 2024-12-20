@@ -8,6 +8,16 @@ type SlackMessageResponse struct {
 	Blocks  []SlackBlock `json:"blocks"`
 }
 
+type SlackMessagesResponse struct {
+	Ok                  bool           `json:"ok"`
+	Messages            []SlackMessage `json:"messages"`
+	HasMore             bool           `json:"has_more"`
+	PinCount            int            `json:"pin_count"`
+	Warning             string         `json:"warning"`
+	ChannelActionsTs    *string        `json:"channel_actions_ts"`
+	ChannelActionsCount int            `json:"channel_actions_count"`
+}
+
 type SlackMessageMap struct {
 	Messages map[string][]SlackSentMessage `json:"messages"`
 }
@@ -28,12 +38,14 @@ type SlackSentMessage struct {
 type SlackMessage struct {
 	User       string          `json:"user"`
 	Type       string          `json:"type"`
+	Subtype    string          `json:"subtype"`
 	Ts         string          `json:"ts"`
 	BotID      string          `json:"bot_id"`
 	AppID      string          `json:"app_id"`
 	Text       string          `json:"text"`
 	Team       string          `json:"team"`
 	BotProfile SlackBotProfile `json:"bot_profile"`
+	Blocks     []SlackBlock    `json:"blocks"`
 }
 
 type SlackBotProfile struct {

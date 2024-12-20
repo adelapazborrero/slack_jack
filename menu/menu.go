@@ -44,7 +44,6 @@ func Build(slackService *service.SlackService) *Menu {
 				menuoption.SendPredefinedPayload(slackService)
 			},
 		},
-
 		"4": {
 			Description: "Print Sent Messages",
 			FunctionToCall: func() {
@@ -55,6 +54,18 @@ func Build(slackService *service.SlackService) *Menu {
 			Description: "Save Sent Messages as JSON",
 			FunctionToCall: func() {
 				menuoption.SaveSentMessages(slackService)
+			},
+		},
+		"6": {
+			Description: "Join Channel",
+			FunctionToCall: func() {
+				menuoption.JoinChannel(slackService)
+			},
+		},
+		"7": {
+			Description: "Get Channel History",
+			FunctionToCall: func() {
+				menuoption.GetChannelHistory(slackService)
 			},
 		},
 	}
