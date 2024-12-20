@@ -1,23 +1,27 @@
 <img src="assets/logo.png"/>
 
-# Slack Jack - Slack Bot Token Abuse Tool
+# Slack Jack - Slack Bot Token Abuse
 
-Slack Jack is a tool designed for penetration testing purposes. It allows you to interact with Slack channels, send messages, retrieve channel lists, and save sent messages as JSON files. The tool is intended to help ethical hackers explore and test Slack bot token vulnerabilities during security assessments.
+Slack Jack is a penetration testing tool designed for ethical hacking and security testing purposes. It allows you to hijack a Slack bot using its token (e.g., xoxb or xoxp) and perform various enumeration and exploitation activities, depending on the bot's assigned permissions.
 
-This tool provides a command-line interface (CLI) where users can perform various actions related to Slack bot tokens, including interacting with Slack's API endpoints for sending and managing messages.
+Convincing a user to interact with a malicious link or payload can often be the most challenging part of gaining initial access. By impersonating a trusted bot, Slack Jack opens up numerous possibilities for social engineering attacks. For example, combining this tool with Evilginx could be an effective way to capture credentials.
+
+This tool provides a command-line interface (CLI) that enables users to interact with Slack's API endpoints, facilitating actions like sending messages, managing bot activities, and more.
 
 ### Features:
 
-- **Get Channel List**: Fetch and display the list of available Slack channels.
-- **Send Message to Channel**: Send messages to selected channels using the Slack bot token.
-- **Send Predefined payloads to Channel**: Send built in payloads to selected channels using the Slack bot token.
-- **Print Sent Messages**: View the list of messages that have been sent by the bot.
-- **Save Sent Messages**: Save the sent messages to a JSON file, with the filename based on the bot user's name and the current date.
-- **Join Channel**: Join a channel based on channelID if your bot has permissions to do so.
-- **Print Chat History**: Dump a selected amount of messages of specified channel if your bot has permissions to do so.
-
+- **Get Channel List**: Retrieve and display the list of Slack channels accessible to the bot.
+- **Send Message to Channel**: Use the Slack bot token to send messages to specified channels.
+- **Send Predefined payloads to Channel**: Deploy built-in payloads to target channels using the Slack bot token.
+- **Print Sent Messages**: Display a history of messages sent by the bot.
+- **Save Sent Messages**: Export sent messages to a JSON file, with the filename based on the bot user's name and the current date.
+- **Join Channel**: Join a channel using its Channel ID, provided the bot has the necessary permissions.
+- **Print Chat History**: Extract and display a specified number of messages from a channel, if the bot has permission to access the chat history.
 
 ### Demo against test target
+
+Here's an example of Slack Jack in action against a test target:
+
 <img src="assets/demo.gif"/>
 
 ## Disclaimer
@@ -63,25 +67,22 @@ By using this tool, you acknowledge and agree to abide by all applicable laws an
 
 ## Usage
 
-Once the tool is initialized it will tell if the bot is valid or not. If the bot is valid, you will be presented with the menu.
-In the menu select your options and follow the Inputs. Depending on the permissions of the bot, you might or might not be able to pull some of the commands.
-
+After initializing the tool, it will validate the provided bot token. If the token is valid, you will be presented with a menu of available options. Select your desired actions and follow the prompts. Note that some commands may not work if the bot lacks the necessary permissions.
 
 # Setting up a test bot
 
-- Create a workspace in slack with any email you want to
-- Go to the docs of what Slack API bot tokens are https://api.slack.com/tutorials/tracks/getting-a-token
-- Create an app, check the manifest so you can do all the changes in json
-- Click on install app and Accept conditions
-- Receive and copy your token
-
-- For developing blocks you can use: https://api.slack.com/reference/block-kit/blocks
+- Create a Slack workspace using any email address.
+- Review the Slack API bot token documentation to understand how to generate a token. https://api.slack.com/tutorials/tracks/getting-a-token
+- Create an app in Slack and use the manifest to make changes in JSON format.
+- Install the app and accept the terms and conditions.
+- Copy the generated bot token.
+- For developing and testing interactive blocks, refer to: https://api.slack.com/reference/block-kit/blocks
 
 ## Roadmap
 
 - Add option to load payloads from local files (json)
 - Add default payloads ready to use (https://api.slack.com/reference/block-kit/block-elements#interactive-components)
-- Add enumeration options such as List Users 
+- Add enumeration options such as List Users
 
 ## License
 
