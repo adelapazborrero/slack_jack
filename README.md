@@ -13,6 +13,8 @@ This tool provides a command-line interface (CLI) where users can perform variou
 - **Send Predefined payloads to Channel**: Send built in payloads to selected channels using the Slack bot token.
 - **Print Sent Messages**: View the list of messages that have been sent by the bot.
 - **Save Sent Messages**: Save the sent messages to a JSON file, with the filename based on the bot user's name and the current date.
+- **Join Channel**: Join a channel based on channelID if your bot has permissions to do so.
+- **Print Chat History**: Dump a selected amount of messages of specified channel if your bot has permissions to do so.
 
 ## Disclaimer
 
@@ -57,11 +59,8 @@ By using this tool, you acknowledge and agree to abide by all applicable laws an
 
 ## Usage
 
-1. **Get Channel List**: Select option 1 to retrieve and display the list of Slack channels available to the bot.
-2. **Send Message to Channel**: Select option 2 to send a message to a chosen Slack channel. You'll be prompted to select a channel and input a message.
-3. **Send Payload to Channel**: Select option 2 to send a message to a chosen Slack channel. You'll be prompted to select a channel and input an option for predefined payloads, remember to upload the blocks as you will for links etc.
-4. **Print Sent Messages**: Select option 3 to print the list of messages that have been sent by the bot.
-5. **Save Sent Messages**: Select option 4 to save the sent messages as a JSON file. The filename will include the bot's username and the current date.
+Once the tool is initialized it will tell if the bot is valid or not. If the bot is valid, you will be presented with the menu.
+In the menu select your options and follow the Inputs. Depending on the permissions of the bot, you might or might not be able to pull some of the commands.
 
 # Setting up a test bot
 
