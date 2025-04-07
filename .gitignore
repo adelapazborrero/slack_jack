@@ -1,3 +1,4 @@
 .vscode
 ./*.json
-slack_jack
+/bin/
+/slack_jack
