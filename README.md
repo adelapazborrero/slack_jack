@@ -65,6 +65,14 @@ By using this tool, you acknowledge and agree to abide by all applicable laws an
    ./slackjack -t <xoxb-slack-bot-token>
    ```
 
+   Optionally, you can specify a custom Slack API URL using the `-api` flag:
+
+   ```bash
+   ./slackjack -t <xoxb-slack-bot-token> -api <custom-api-url>
+   ```
+
+   If no `-api` flag is provided, it will default to `https://slack.com/api`.
+
 ## Usage
 
 After initializing the tool, it will validate the provided bot token. If the token is valid, you will be presented with a menu of available options. Select your desired actions and follow the prompts. Note that some commands may not work if the bot lacks the necessary permissions.
