@@ -13,8 +13,6 @@ import (
 )
 
 const (
-	slackApi = "https://slack.com/api"
-
 	validateEndpoint    = "/auth.test"
 	channelListEndpoint = "/conversations.list"
 	sendMessageEndpoint = "/chat.postMessage"
@@ -28,11 +26,13 @@ type SlackService struct {
 	Messages *model.SlackMessageMap
 }
 
-func NewSlackService(bot *model.SlackBot) *SlackService {
+func NewSlackService(bot *model.SlackBot, apiUrl string) *SlackService {
 	return &SlackService{
-		apiUrl:   slackApi,
+		apiUrl:   apiUrl,
 		SlackBot: bot,
-		Channels: nil,
+		Channels: &model.ChannelList{
+			Channels: make([]model.Channel, 0),
+		},
 		Messages: &model.SlackMessageMap{
 			Messages: make(map[string][]model.SlackSentMessage),
 		},
@@ -57,7 +57,7 @@ func (serv *SlackService) PrintSentMessages() {
 }
 
 func (serv *SlackService) ValidateBot() error {
-	req, err := http.NewRequest(http.MethodPost, slackApi+validateEndpoint, nil)
+	req, err := http.NewRequest(http.MethodPost, serv.apiUrl+validateEndpoint, nil)
 	if err != nil {
 		return errors.New("could not create HTTP request for slack API")
 	}
@@ -88,7 +88,7 @@ func (serv *SlackService) ValidateBot() error {
 }
 
 func (serv *SlackService) GetConversationList() error {
-	req, err := http.NewRequest(http.MethodPost, slackApi+channelListEndpoint, nil)
+	req, err := http.NewRequest(http.MethodPost, serv.apiUrl+channelListEndpoint, nil)
 	if err != nil {
 		return errors.New("could not create HTTP request for slack API")
 	}
@@ -129,7 +129,7 @@ func (serv *SlackService) SendMessage(channelID, message string) error {
 		return errors.New("could not marshal message payload to JSON")
 	}
 
-	req, err := http.NewRequest(http.MethodPost, slackApi+sendMessageEndpoint, bytes.NewBuffer(jsonPayload))
+	req, err := http.NewRequest(http.MethodPost, serv.apiUrl+sendMessageEndpoint, bytes.NewBuffer(jsonPayload))
 	if err != nil {
 		return errors.New("could not create HTTP request for sending message")
 	}
@@ -189,7 +189,7 @@ func (serv *SlackService) SendMessageWithBlocks(channelID string, blocks json.Ra
 		return errors.New("could not marshal message payload to JSON")
 	}
 
-	req, err := http.NewRequest(http.MethodPost, slackApi+sendMessageEndpoint, bytes.NewBuffer(jsonPayload))
+	req, err := http.NewRequest(http.MethodPost, serv.apiUrl+sendMessageEndpoint, bytes.NewBuffer(jsonPayload))
 	if err != nil {
 		return errors.New("could not create HTTP request for sending message with blocks")
 	}
@@ -236,7 +236,7 @@ func (s *SlackService) getPermalink(channelID, messageTs string) (*model.SlackPe
 	formData.Set("channel", channelID)
 	formData.Set("message_ts", messageTs)
 
-	req, err := http.NewRequest("POST", slackApi+permalinkEndpoint, strings.NewReader(formData.Encode()))
+	req, err := http.NewRequest("POST", s.apiUrl+permalinkEndpoint, strings.NewReader(formData.Encode()))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create permalink request: %v", err)
 	}
@@ -275,7 +275,7 @@ func (serv *SlackService) JoinChannel(channelID string) error {
 		return errors.New("could not marshal join channel payload to JSON")
 	}
 
-	req, err := http.NewRequest(http.MethodPost, slackApi+joinEndpoint, bytes.NewBuffer(jsonPayload))
+	req, err := http.NewRequest(http.MethodPost, serv.apiUrl+joinEndpoint, bytes.NewBuffer(jsonPayload))
 	if err != nil {
 		return errors.New("could not create HTTP request for joining channel")
 	}
@@ -314,7 +314,7 @@ func (serv *SlackService) GetChannelHistory(channelID string, limit int) ([]mode
 	params.Set("channel", channelID)
 	params.Set("limit", fmt.Sprintf("%d", limit))
 
-	req, err := http.NewRequest(http.MethodGet, slackApi+historyEndpoint+"?"+params.Encode(), nil)
+	req, err := http.NewRequest(http.MethodGet, serv.apiUrl+historyEndpoint+"?"+params.Encode(), nil)
 	if err != nil {
 		return nil, errors.New("could not create HTTP request for fetching channel history")
 	}

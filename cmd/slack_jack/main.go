@@ -15,6 +15,7 @@ import (
 func main() {
 	slackToken := flag.String("t", "", "Slack Bot Token")
 	flag.StringVar(slackToken, "token", "", "Slack Bot Token")
+	slackApiUrl := flag.String("api", "https://slack.com/api", "Slack API base URL")
 	flag.Parse()
 
 	if *slackToken == "" {
@@ -30,7 +31,7 @@ func main() {
 		return
 	}
 
-	slackService := service.NewSlackService(slackBot)
+	slackService := service.NewSlackService(slackBot, *slackApiUrl)
 
 	err = slackService.ValidateBot()
 	if err != nil {
